@@ -1,0 +1,33 @@
+node{
+    def mavenHome = tool name:'Maven3.8.6'
+  stage('1cloneCode'){
+    git "https://github.com/kerrylandmark/maven-web-application"
+     }
+  stage('2Test&Build'){
+    sh "${mavenHome}/bin/mvn clean package"
+     }
+  stage('3codeQuality'){
+    sh "${mavenHome}/bin/mvn sonar:sonar"
+     }
+  stage('4uploadArtifacts'){
+     sh "${mavenHome}/bin/mvn deploy"
+     // vi pom.xml and added repository details   
+    // vi setting.xml and add AUTHENTICATION details
+     }
+        stage('5deploy2UAT'){
+      sh "echo 'deploy to UAT'"
+    deploy adapters: [tomcat9(credentialsId: 'tomcat-credential-1', path: '', url: 'http://3.83.155.6:8177')], contextPath: null, war: 'target/*war'
+      }
+   stage('6approvalGate'){
+      sh "echo 'ready for review' "
+    timeout(time:5, unit:'DAYS') {
+    input message: 'Application ready for deployment, Please review and approve'
+      } 
+   }
+   stage('7deploy2Prod'){
+    deploy adapters: [tomcat9(credentialsId: 'tomcat-credential-1', path: '', url: 'http://3.83.155.6:8177')], contextPath: null, war: 'target/*war'   
+   }
+   stage('8emailNotification'){
+   emailext body: 'please review', recipientProviders: [buildUser(), developers()], subject: 'Build Status', to: 'imonitieisi@gmail.com'    
+   }
+  }
