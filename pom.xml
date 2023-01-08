@@ -95,13 +95,13 @@
 	    <repository>
 	      <id>nexus</id>
 	      <name>Landmark Technologies Releases Nexus Repository</name>
-	      <url>http://34.229.56.185:8081/repository/walmart-releases/</url>
+	      <url>http://172.31.57.55:8081/repository/walmart-releases/</url>
 	    </repository>
 	    
 	    <snapshotRepository>
 	      <id>nexus</id>
 	      <name>Landmark Technologies Snapshot Nexus Repository </name>
-	      <url>http://34.229.56.185:8081/repository/walmart-snapshots/</url>
+	      <url>http://172.31.57.55:8081/repository/walmart-snapshots/</url>
 	    </snapshotRepository>
 	    
 	</distributionManagement>
